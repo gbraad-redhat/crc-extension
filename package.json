@@ -68,6 +68,9 @@
   },
   "dependencies": {},
   "devDependencies": {
+    "@types/segment-analytics": "^0.0.34",
+    "analytics-node": "^6.2.0",
+    "object-hash": "^3.0.0",
     "7zip-min": "^1.4.4",
     "@podman-desktop/api": "^0.0.202303241204-ff137a2",
     "@rollup/plugin-commonjs": "^24.0.1",

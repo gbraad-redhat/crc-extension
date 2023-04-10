@@ -33,8 +33,24 @@ import { deleteCrc, registerDeleteCommand } from './crc-delete';
 import { syncPreferences } from './preferences';
 import { stopCrc } from './crc-stop';
 import { registerOpenTerminalCommand } from './dev-terminal';
+import { Telemetry} from './telemetry';
+
+let telemetry : Telemetry | undefined;
 
 export async function activate(extensionContext: extensionApi.ExtensionContext): Promise<void> {
+
+  //activate telemetry
+  telemetry = new Telemetry(true, getSegmentWriteKey())
+
+  function getSegmentWriteKey() {
+    // published?
+    //if (app.isPackaged) {
+    //  return 'cvpHsNcmGCJqVzf6YxrSnVlwFSAZaYtp'
+    //}
+    // development / ELECTRON_IS_DEV
+    return 'R7jGNYYO5gH0Nl5gDlMEuZ3gPlDJKQak'
+  }
+
   const crcInstaller = new CrcInstall();
   extensionApi.configuration.getConfiguration();
   const crcVersion = await getCrcVersion();
@@ -193,6 +209,9 @@ function readPreset(crcStatus: Status): 'Podman' | 'OpenShift' | 'MicroShift' | 
     }
   } catch (err) {
     console.log('error while getting preset', err);
+
+    telemetry?.trackError(err)
+
     return 'unknown';
   }
 }
